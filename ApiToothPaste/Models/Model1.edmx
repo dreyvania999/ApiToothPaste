@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище p_Drey_AndroidToothbrushModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "41p_Drey_AndroidToothbrush.dbo.toothpaste" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="toothpaste">
+          <Key>
+            <PropertyRef Name="id_toothpaste" />
+            <PropertyRef Name="name_toothpaste" />
+            <PropertyRef Name="abrasiveness_index" />
+            <PropertyRef Name="country_of_origin" />
+            <PropertyRef Name="volume" />
+            <PropertyRef Name="price" />
+          </Key>
+          <Property Name="id_toothpaste" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name_toothpaste" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="abrasiveness_index" Type="int" Nullable="false" />
+          <Property Name="country_of_origin" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="volume" Type="int" Nullable="false" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="Image" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="Хранилище p_Drey_AndroidToothbrushModelContainer">
+          <EntitySet Name="toothpaste" EntityType="Self.toothpaste" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [toothpaste].[id_toothpaste] AS [id_toothpaste], 
+    [toothpaste].[name_toothpaste] AS [name_toothpaste], 
+    [toothpaste].[abrasiveness_index] AS [abrasiveness_index], 
+    [toothpaste].[country_of_origin] AS [country_of_origin], 
+    [toothpaste].[volume] AS [volume], 
+    [toothpaste].[price] AS [price], 
+    [toothpaste].[Image] AS [Image]
+    FROM [dbo].[toothpaste] AS [toothpaste]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="p_Drey_AndroidToothbrushModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="toothpaste">
+          <Key>
+            <PropertyRef Name="id_toothpaste" />
+            <PropertyRef Name="name_toothpaste" />
+            <PropertyRef Name="abrasiveness_index" />
+            <PropertyRef Name="country_of_origin" />
+            <PropertyRef Name="volume" />
+            <PropertyRef Name="price" />
+          </Key>
+          <Property Name="id_toothpaste" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name_toothpaste" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="abrasiveness_index" Type="Int32" Nullable="false" />
+          <Property Name="country_of_origin" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="volume" Type="Int32" Nullable="false" />
+          <Property Name="price" Type="Double" Nullable="false" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="toothpaste" EntityType="Self.toothpaste" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище p_Drey_AndroidToothbrushModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="toothpaste">
+            <EntityTypeMapping TypeName="p_Drey_AndroidToothbrushModel.toothpaste">
+              <MappingFragment StoreEntitySet="toothpaste">
+                <ScalarProperty Name="id_toothpaste" ColumnName="id_toothpaste" />
+                <ScalarProperty Name="name_toothpaste" ColumnName="name_toothpaste" />
+                <ScalarProperty Name="abrasiveness_index" ColumnName="abrasiveness_index" />
+                <ScalarProperty Name="country_of_origin" ColumnName="country_of_origin" />
+                <ScalarProperty Name="volume" ColumnName="volume" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
