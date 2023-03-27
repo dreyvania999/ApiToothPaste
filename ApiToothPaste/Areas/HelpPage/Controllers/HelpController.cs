@@ -1,8 +1,7 @@
-using System;
-using System.Web.Http;
-using System.Web.Mvc;
 using ApiToothPaste.Areas.HelpPage.ModelDescriptions;
 using ApiToothPaste.Areas.HelpPage.Models;
+using System.Web.Http;
+using System.Web.Mvc;
 
 namespace ApiToothPaste.Areas.HelpPage.Controllers
 {
@@ -33,7 +32,7 @@ namespace ApiToothPaste.Areas.HelpPage.Controllers
 
         public ActionResult Api(string apiId)
         {
-            if (!String.IsNullOrEmpty(apiId))
+            if (!string.IsNullOrEmpty(apiId))
             {
                 HelpPageApiModel apiModel = Configuration.GetHelpPageApiModel(apiId);
                 if (apiModel != null)
@@ -47,11 +46,10 @@ namespace ApiToothPaste.Areas.HelpPage.Controllers
 
         public ActionResult ResourceModel(string modelName)
         {
-            if (!String.IsNullOrEmpty(modelName))
+            if (!string.IsNullOrEmpty(modelName))
             {
                 ModelDescriptionGenerator modelDescriptionGenerator = Configuration.GetModelDescriptionGenerator();
-                ModelDescription modelDescription;
-                if (modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out modelDescription))
+                if (modelDescriptionGenerator.GeneratedModels.TryGetValue(modelName, out ModelDescription modelDescription))
                 {
                     return View(modelDescription);
                 }

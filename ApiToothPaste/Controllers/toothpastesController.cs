@@ -1,20 +1,17 @@
-﻿using System;
+﻿using ApiToothPaste.Models;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
-using ApiToothPaste.Models;
 
 namespace ApiToothPaste.Controllers
 {
     public class toothpastesController : ApiController
     {
-        private Entities db = new Entities();
+        private readonly Entities db = new Entities();
 
         // GET: api/toothpastes
         [ResponseType(typeof(List<ModelToothPaste>))]
@@ -28,12 +25,7 @@ namespace ApiToothPaste.Controllers
         public IHttpActionResult Gettoothpaste(int id)
         {
             toothpaste toothpaste = db.toothpaste.Find(id);
-            if (toothpaste == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(toothpaste);
+            return toothpaste == null ? NotFound() : (IHttpActionResult)Ok(toothpaste);
         }
 
         // PUT: api/toothpastes/5
@@ -54,7 +46,7 @@ namespace ApiToothPaste.Controllers
 
             try
             {
-                db.SaveChanges();
+                _ = db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,8 +72,8 @@ namespace ApiToothPaste.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.toothpaste.Add(toothpaste);
-            db.SaveChanges();
+            _ = db.toothpaste.Add(toothpaste);
+            _ = db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = toothpaste.id_toothpaste }, toothpaste);
         }
@@ -96,8 +88,8 @@ namespace ApiToothPaste.Controllers
                 return NotFound();
             }
 
-            db.toothpaste.Remove(toothpaste);
-            db.SaveChanges();
+            _ = db.toothpaste.Remove(toothpaste);
+            _ = db.SaveChanges();
 
             return Ok(toothpaste);
         }

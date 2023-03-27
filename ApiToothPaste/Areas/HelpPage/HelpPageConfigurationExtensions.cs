@@ -1,9 +1,10 @@
+using ApiToothPaste.Areas.HelpPage.ModelDescriptions;
+using ApiToothPaste.Areas.HelpPage.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -11,8 +12,6 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
-using ApiToothPaste.Areas.HelpPage.ModelDescriptions;
-using ApiToothPaste.Areas.HelpPage.Models;
 
 namespace ApiToothPaste.Areas.HelpPage
 {
@@ -190,7 +189,7 @@ namespace ApiToothPaste.Areas.HelpPage
         /// <param name="sampleGenerator">The help page sample generator.</param>
         public static void SetHelpPageSampleGenerator(this HttpConfiguration config, HelpPageSampleGenerator sampleGenerator)
         {
-            config.Properties.AddOrUpdate(
+            _ = config.Properties.AddOrUpdate(
                 typeof(HelpPageSampleGenerator),
                 k => sampleGenerator,
                 (k, o) => sampleGenerator);
@@ -218,16 +217,15 @@ namespace ApiToothPaste.Areas.HelpPage
         /// </returns>
         public static HelpPageApiModel GetHelpPageApiModel(this HttpConfiguration config, string apiDescriptionId)
         {
-            object model;
             string modelId = ApiModelPrefix + apiDescriptionId;
-            if (!config.Properties.TryGetValue(modelId, out model))
+            if (!config.Properties.TryGetValue(modelId, out object model))
             {
                 Collection<ApiDescription> apiDescriptions = config.Services.GetApiExplorer().ApiDescriptions;
-                ApiDescription apiDescription = apiDescriptions.FirstOrDefault(api => String.Equals(api.GetFriendlyId(), apiDescriptionId, StringComparison.OrdinalIgnoreCase));
+                ApiDescription apiDescription = apiDescriptions.FirstOrDefault(api => string.Equals(api.GetFriendlyId(), apiDescriptionId, StringComparison.OrdinalIgnoreCase));
                 if (apiDescription != null)
                 {
                     model = GenerateApiModel(apiDescription, config);
-                    config.Properties.TryAdd(modelId, model);
+                    _ = config.Properties.TryAdd(modelId, model);
                 }
             }
 
@@ -321,7 +319,7 @@ namespace ApiToothPaste.Areas.HelpPage
                         // when source is FromUri. Ignored in request model and among resource parameters but listed
                         // as a simple string here.
                         ModelDescription modelDescription = modelGenerator.GetOrCreateModelDescription(typeof(string));
-                        AddParameterDescription(apiModel, apiParameter, modelDescription);
+                        _ = AddParameterDescription(apiModel, apiParameter, modelDescription);
                     }
                 }
             }
@@ -329,12 +327,7 @@ namespace ApiToothPaste.Areas.HelpPage
 
         private static bool IsBindableWithTypeConverter(Type parameterType)
         {
-            if (parameterType == null)
-            {
-                return false;
-            }
-
-            return TypeDescriptor.GetConverter(parameterType).CanConvertFrom(typeof(string));
+            return parameterType != null && TypeDescriptor.GetConverter(parameterType).CanConvertFrom(typeof(string));
         }
 
         private static ParameterDescription AddParameterDescription(HelpPageApiModel apiModel,
@@ -385,18 +378,17 @@ namespace ApiToothPaste.Areas.HelpPage
             }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = "The exception is recorded as ErrorMessages.")]
         private static void GenerateSamples(HelpPageApiModel apiModel, HelpPageSampleGenerator sampleGenerator)
         {
             try
             {
-                foreach (var item in sampleGenerator.GetSampleRequests(apiModel.ApiDescription))
+                foreach (KeyValuePair<MediaTypeHeaderValue, object> item in sampleGenerator.GetSampleRequests(apiModel.ApiDescription))
                 {
                     apiModel.SampleRequests.Add(item.Key, item.Value);
                     LogInvalidSampleAsError(apiModel, item.Value);
                 }
 
-                foreach (var item in sampleGenerator.GetSampleResponses(apiModel.ApiDescription))
+                foreach (KeyValuePair<MediaTypeHeaderValue, object> item in sampleGenerator.GetSampleResponses(apiModel.ApiDescription))
                 {
                     apiModel.SampleResponses.Add(item.Key, item.Value);
                     LogInvalidSampleAsError(apiModel, item.Value);
@@ -404,7 +396,7 @@ namespace ApiToothPaste.Areas.HelpPage
             }
             catch (Exception e)
             {
-                apiModel.ErrorMessages.Add(String.Format(CultureInfo.CurrentCulture,
+                apiModel.ErrorMessages.Add(string.Format(CultureInfo.CurrentCulture,
                     "An exception has occurred while generating the sample. Exception message: {0}",
                     HelpPageSampleGenerator.UnwrapException(e).Message));
             }
@@ -445,11 +437,9 @@ namespace ApiToothPaste.Areas.HelpPage
             Collection<ApiDescription> apis = config.Services.GetApiExplorer().ApiDescriptions;
             foreach (ApiDescription api in apis)
             {
-                ApiParameterDescription parameterDescription;
-                Type parameterType;
-                if (TryGetResourceParameter(api, config, out parameterDescription, out parameterType))
+                if (TryGetResourceParameter(api, config, out _, out Type parameterType))
                 {
-                    modelGenerator.GetOrCreateModelDescription(parameterType);
+                    _ = modelGenerator.GetOrCreateModelDescription(parameterType);
                 }
             }
             return modelGenerator;
@@ -457,8 +447,7 @@ namespace ApiToothPaste.Areas.HelpPage
 
         private static void LogInvalidSampleAsError(HelpPageApiModel apiModel, object sample)
         {
-            InvalidSample invalidSample = sample as InvalidSample;
-            if (invalidSample != null)
+            if (sample is InvalidSample invalidSample)
             {
                 apiModel.ErrorMessages.Add(invalidSample.ErrorMessage);
             }
